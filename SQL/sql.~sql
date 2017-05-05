@@ -1,0 +1,93 @@
+---查询数据库中所有的用户 需要dba 权限
+ grant dba to wdk_oracle;--此用户必须具有dba权限
+ select username from dba_users;
+ 
+ --查询系统当前时间
+ select sysdate from dual;
+
+---查血表的结构  describe 表名; 简写 :desc 只能在命令窗口执行
+ describe emp;
+
+select * from emp where empno in (7839,7369);
+select * from emp;
+
+--concat(str1,str2) 将两个字符串拼接
+select empno ,concat('这个工作好吗?',job) from emp;  
+
+--length(str); 字符串长度 数字的位数
+select length(job),length(empno) from emp;
+
+--upper(str); 全部大写  
+--lower(str) 全部小写
+--initcap(str) 首字母大写
+select upper(job),upper(empno),lower(job),initcap(job) from emp;
+
+--字符截取
+-- trim( str1 from str2) str只能占 一个字符 从两头截取 知道不一样为止
+-- ltrim( str1 , str2)
+-- rtrim( str1 , str2)
+
+select job ,trim('1'from'1211'), 
+            ltrim('haoren','hao'),
+            rtrim('haoren','ren')
+     from emp where job='MANAGER';
+--结果
+-- 2
+--ren
+--hao 
+
+
+--lpad(str,n,pad):在字符串str的 左边 使用pad 进行填充,总长度为 n    
+--rpad(str,n,pad):在字符串str的 右边 使用pad 进行填充,总长度为 n   
+ select job,lpad('1200.00',10,'#') from emp ; --###1200.00  
+ select rpad('1200.00',10,'#') ,job from emp; --1200.00### 
+ select rpad(empno,7,'-id') ceshi ,empno ,job from emp;-- 1234-id
+ select rpad(empno,6,'-id') ceshi ,empno ,job from emp; -- 1234-i
+ 
+ 
+---substr(str,begin,length) 从 str的 begin位置 截取 length 长度 
+  select substr('01234567',3,4) from dual;--2345,begin从1开始
+  select substr('01234567',0,4) from dual;--0123
+  select substr('01234567',-3,3) from dual;--567 ,负数表示从后向前
+  select substr('01234567',-1,3) from dual;--7 ,-1表示最后的位置
+  select substr('01234567',-4,3) from dual;--456
+  select substr('01234567',-2,1) from dual;--6
+  select substr('01234567',1,1) from dual; --0
+  select substr('01234567',1,2) from dual; --01
+  select substr('01234567',1,3) from dual; --012
+  select substr('01234567',2,1) from dual; --1
+  select substr('01234567',2,2) from dual; --12
+  select substr('01234567',2,3) from dual; --123
+  -- length 小于等于0 结果都为 null
+  select substr('01234567',1,0) as s from dual where substr('01234567',1,-1) ='';
+  select substr('01234567',1,-1) as s from dual where substr('01234567',1,-1) is null; 
+
+
+--systimestamp 当前时间戳 sysdate 当前时间
+select systimestamp  ,sysdate from dual; 
+
+---round(n[,m]):对n 进行四舍五入的操作,m 表示精度 
+--ceil(n):向上取整    小数点后大于0.00....1 就进一位
+--floor(n):向下取整  小数点后舍弃
+--mod(m,n):取余
+--power(n,m):返回 n 的 m 次幂
+--sign(n):如果n 小于0 返回-1 ,等于0 返回0 ,大于0 返回1 
+select round(456.78911741,6),
+    round(1.834), round(1.234,1),round(1.234,2),round(1.236,2),
+       ceil(0.99),
+       ceil(0.000),
+       ceil(0.000000000000001),
+       floor(8.545),
+       floor(8.054),
+       mod(3,2) ,
+       power(2,3) as"2^3",
+       sign(-1),
+        sign(0),
+         sign(1) from dual;
+       
+       
+ -- 别名 特殊符号 用 "" 
+--coalesce(exp1,exp2,...):返回第一个非空值   expN类型要
+select coalesce(null,null,'abc') from dual;--abc
+select coalesce(null,job,HIREDATE) from emp;
+select * from emp;
